@@ -1,19 +1,20 @@
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
+var bluebird = require('bluebird');
 
 
 var AuthController = {
-  login: login,
+  login: bluebird.method(login),
   logout: logout,
   register: register
 }
 
-var secret = 'shhhh'
+var secret = 'shhhh';
 
 function login(credentials) {
   console.log(credentials);
   if (!credentials.user || !credentials.pass) {
-    throw new Error('invalid credentials')
+    throw new Error('invalid credentials');
   }
   var token = jwt.sign({ id: 1, name:'ieltxu' }, secret);
 
@@ -28,6 +29,4 @@ function register() {
 
 }
 
-//AuthController.prototype = bluebird.promisifyAll(AuthController.prototype, {suffix: ''});
-
-module.exports = AuthController;
+module.exports =  AuthController;

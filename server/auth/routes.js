@@ -1,19 +1,21 @@
 'use strict';
-var bluebird = require('bluebird');
-var AuthController = bluebird.promisifyAll(require('./controller'));
+var AuthController = require('./controller');
 var router = require('express').Router();
 
 router.post('/register', AuthController.register);
 router.post('/login', function(req, res) {
-  AuthController.loginAsync({user: req.body.user, pass: req.body.pass})
+  AuthController.login({user: req.body.user, pass: req.body.pass})
     .then(function(token){
       console.log(token);
-      res.end(token);
+      res.json(token);
     })
     .catch(function(error) {
       console.log('error');
       res.status(401)
-      res.end("Invalid credentials");
+      res.json({message:"Invalid credentials"});
+    })
+    .finally(function() {
+      res.end();
     });
 });
 router.post('/logout', AuthController.logout);
